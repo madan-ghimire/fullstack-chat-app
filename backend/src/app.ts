@@ -7,9 +7,9 @@ import messageRoutes from "@/routes/message.route";
 const app = express();
 
 // Middleware
-app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: "5mb" }));
 app.use(cookieParser());
+app.use(cors({ origin: "http://localhost:5173", credentials: true }));
 
 // Routes
 app.use("/api/health", (req: Request, res: Response) => {
@@ -20,6 +20,6 @@ app.use("/api/health", (req: Request, res: Response) => {
 });
 
 app.use("/api/auth", authRoutes);
-app.use("/api/message", messageRoutes);
+app.use("/api/messages", messageRoutes);
 
 export default app;
