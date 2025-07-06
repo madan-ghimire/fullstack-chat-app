@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+// todo need to replace any with specific type
 import { create } from "zustand";
 import toast from "react-hot-toast";
 import { axiosInstance } from "../lib/axios";
@@ -16,12 +18,10 @@ interface ChatStore {
   getMessages: (userId: string) => Promise<void>;
   setSelectedUser: (selectedUser: User | null) => void;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   sendMessage: (messageData: any) => Promise<void>;
 
   subscribeToMessages: () => void;
   unsubscribeFromMessages: () => void;
-
 
   isTyping: boolean;
 
@@ -39,14 +39,13 @@ export const useChatStore = create<ChatStore>((set, get) => ({
 
   isTyping: false,
 
-
   getUsers: async () => {
     set({ isUsersLoading: true });
 
     try {
       const res = await axiosInstance.get("/messages/users");
       set({ users: res.data });
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // eslint--next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       toast.error(error.response.data.message);
     } finally {
@@ -59,8 +58,6 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     try {
       const res = await axiosInstance.get(`/messages/${userId}`);
       set({ messages: res.data });
-
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       toast.error(error.response.data.message);
     } finally {
@@ -68,7 +65,6 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     }
   },
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   sendMessage: async (messageData: any) => {
     const { selectedUser, messages } = get();
 
@@ -78,8 +74,6 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         messageData
       );
       set({ messages: [...messages, res.data] });
-
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       toast.error(error.response.data.message);
     }
@@ -123,8 +117,8 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       set({ messages: [...get().messages, newMessage] });
     });
 
-     // ✅ Listen for typing
-     socket?.on("typing", ({ senderId }) => {
+    // ✅ Listen for typing
+    socket?.on("typing", ({ senderId }) => {
       if (senderId === selectedUser._id) {
         set({ isTyping: true });
       }
@@ -141,9 +135,9 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     const socket = useAuthStore.getState().socket;
     socket?.off("newMessage");
 
-      // ✅ Remove typing listeners
-      socket?.off("typing");
-      socket?.off("stopTyping");
+    // ✅ Remove typing listeners
+    socket?.off("typing");
+    socket?.off("stopTyping");
   },
 
   setSelectedUser: (selectedUser: User | null) => set({ selectedUser }),

@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+// todo need to replace any with specific type
+
 import { create } from "zustand";
 import { axiosInstance } from "../lib/axios";
 import toast from "react-hot-toast";
@@ -19,19 +22,16 @@ type SignInData = {
 
 // ✅ Define the type for your store
 interface AuthStore {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   authUser: any; // Replace 'any' with your actual User type when available
   isCheckingAuth: boolean;
   isSigningUp: boolean;
   isLoggingIn: boolean;
   isUpdatingProfile: boolean;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onlineUsers: any[]; // Replace 'any' with a specific user type array
 
   checkAuth: () => Promise<void>;
   signup: (data: SignUpData) => Promise<void>;
   login: (data: SignInData) => Promise<void>;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   updateProfile: (data: any) => Promise<void>;
   logout: () => void;
   socket: Socket | null;
@@ -62,7 +62,6 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
     }
   },
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   signup: async (data: any) => {
     set({ isSigningUp: true });
 
@@ -72,8 +71,6 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
       toast.success("Account created successfully");
 
       get().connectSocket();
-
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       toast.error(error.response.data.message);
     } finally {
@@ -83,7 +80,6 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
 
   // todo login
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   login: async (data: any) => {
     set({ isLoggingIn: true });
     try {
@@ -93,8 +89,6 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
       toast.success("Logged in successfully");
 
       get().connectSocket();
-
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       toast.error(error.response.data.message);
     } finally {
@@ -108,14 +102,11 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
       set({ authUser: null });
       toast.success("Logged out successfully");
       get().disconnectSocket();
-
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       toast.error(error.response.data.message);
     }
   },
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   updateProfile: async (data: any) => {
     set({ isUpdatingProfile: true });
 
@@ -123,7 +114,6 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
       const res = await axiosInstance.put("/auth/update-profile", data);
       set({ authUser: res.data });
       toast.success("Profile updated successfully");
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       console.log("error in update profile:", error);
       toast.error(error.response.data.message);
