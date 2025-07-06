@@ -21,6 +21,13 @@ interface ChatStore {
 
   subscribeToMessages: () => void;
   unsubscribeFromMessages: () => void;
+
+
+  isTyping: boolean;
+
+  // Typing feature
+  emitTyping: () => void;
+  emitStopTyping: () => void;
 }
 
 export const useChatStore = create<ChatStore>((set, get) => ({
@@ -29,6 +36,9 @@ export const useChatStore = create<ChatStore>((set, get) => ({
   selectedUser: null,
   isUsersLoading: false,
   isMessagesLoading: false,
+
+  isTyping: false,
+
 
   getUsers: async () => {
     set({ isUsersLoading: true });
@@ -75,6 +85,30 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     }
   },
 
+  emitTyping: () => {
+    const { selectedUser } = get();
+    const socket = useAuthStore.getState().socket;
+
+    if (!selectedUser || !socket) return;
+
+    socket.emit("typing", {
+      receiverId: selectedUser._id,
+      senderId: useAuthStore.getState().authUser?._id,
+    });
+  },
+
+  emitStopTyping: () => {
+    const { selectedUser } = get();
+    const socket = useAuthStore.getState().socket;
+
+    if (!selectedUser || !socket) return;
+
+    socket.emit("stopTyping", {
+      receiverId: selectedUser._id,
+      senderId: useAuthStore.getState().authUser?._id,
+    });
+  },
+
   subscribeToMessages: () => {
     const { selectedUser } = get();
     if (!selectedUser) return;
@@ -88,11 +122,28 @@ export const useChatStore = create<ChatStore>((set, get) => ({
 
       set({ messages: [...get().messages, newMessage] });
     });
+
+     // ✅ Listen for typing
+     socket?.on("typing", ({ senderId }) => {
+      if (senderId === selectedUser._id) {
+        set({ isTyping: true });
+      }
+    });
+
+    socket?.on("stopTyping", ({ senderId }) => {
+      if (senderId === selectedUser._id) {
+        set({ isTyping: false });
+      }
+    });
   },
 
   unsubscribeFromMessages: () => {
     const socket = useAuthStore.getState().socket;
     socket?.off("newMessage");
+
+      // ✅ Remove typing listeners
+      socket?.off("typing");
+      socket?.off("stopTyping");
   },
 
   setSelectedUser: (selectedUser: User | null) => set({ selectedUser }),

@@ -28,6 +28,21 @@ export const initSocket = (server: HTTPServer) => {
 
     io.emit("getOnlineUsers", Object.keys(userSocketMap));
 
+    // typing events
+    socket.on("typing", ({receiverId, senderId }) => {
+      const receiverSocketId  = getReceiverSocketId(receiverId);
+      if (receiverSocketId) {
+        io.to(receiverSocketId).emit("typing", {senderId });
+      }
+    });
+
+    socket.on("stopTyping", ({ receiverId, senderId }) => {
+      const receiverSocketId = getReceiverSocketId(receiverId);
+      if (receiverSocketId) {
+        io.to(receiverSocketId).emit("stopTyping", { senderId });
+      }
+    });
+
     socket.on("disconnect", () => {
       console.log("A user disconnected", socket.id);
       if (userId) {
