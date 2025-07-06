@@ -11,6 +11,7 @@ const SignUp = lazy(() => import("./pages/SignUpPage"));
 const Login = lazy(() => import("./pages/LoginPage"));
 const Settings = lazy(() => import("./pages/SettingsPage"));
 const Profile = lazy(() => import("./pages/ProfilePage"));
+const NotFound = lazy(() => import("./pages/NotFound"));
 
 const App = () => {
   const { authUser, checkAuth, isCheckingAuth } = useAuthStore();
@@ -59,6 +60,7 @@ const App = () => {
           path="/profile"
           element={authUser ? <Profile /> : <Navigate to="/login" />}
         />
+        <Route path="*" element={<NotFound />} />
       </Routes>
       <Toaster position="bottom-right" />
     </div>
