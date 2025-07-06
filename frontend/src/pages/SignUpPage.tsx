@@ -1,4 +1,8 @@
-import { useState, type FormEvent } from "react";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+
 import { useAuthStore } from "../store/useAuthStore";
 import {
   Eye,
@@ -9,48 +13,34 @@ import {
   MessageSquare,
   User,
 } from "lucide-react";
-
 import { Link } from "react-router-dom";
 import AuthImagePattern from "../components/AuthImagePattern";
-import toast from "react-hot-toast";
 
-type formDataType = {
-  fullName: string;
-  email: string;
-  password: string;
-};
+const signupSchema = z.object({
+  fullName: z.string().min(1, "Full name is required"),
+  email: z.string().min(1, "Email is required").email("Invalid email format"),
+  password: z.string().min(6, "Password must be at least 6 characters"),
+});
+
+type SignUpFormType = z.infer<typeof signupSchema>;
 
 const SignUp = () => {
-  const [showPassword, setShowPassword] = useState<boolean>(false);
-  const [formData, setFormData] = useState<formDataType>({
-    fullName: "",
-    email: "",
-    password: "",
-  });
-
+  const [showPassword, setShowPassword] = useState(false);
   const { isSigningUp, signup } = useAuthStore();
 
-  const validateForm = () => {
-    if (!formData.fullName.trim()) return toast.error("Full name is required");
-    if (!formData.email.trim()) return toast.error("Email is required");
-    if (!/\S+@\S+\.\S+/.test(formData.email))
-      return toast.error("Invalid email format");
-    if (!formData.password) return toast.error("Password is required");
-    if (formData.password.length < 6)
-      return toast.error("Password must be at least 6 characters");
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<SignUpFormType>({
+    resolver: zodResolver(signupSchema),
+    mode: "onChange",
+  });
 
-    return true;
+  const onSubmit = (data: SignUpFormType) => {
+    signup(data);
   };
 
-  const handleSubmit = (event: FormEvent) => {
-    event.preventDefault();
-
-    const success = validateForm();
-
-    if (success === true) signup(formData);
-
-    console.log("form submitted");
-  };
   return (
     <div className="min-h-screen grid lg:grid-cols-2 overflow-y-auto">
       {/* left side */}
@@ -59,10 +49,7 @@ const SignUp = () => {
           {/* LOGO */}
           <div className="text-center mb-8">
             <div className="flex flex-col items-center gap-2 group">
-              <div
-                className="size-12 rounded-xl bg-primary/10 flex items-center justify-center 
-              group-hover:bg-primary/20 transition-colors"
-              >
+              <div className="size-12 rounded-xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
                 <MessageSquare className="size-6 text-primary" />
               </div>
               <h1 className="text-2xl font-bold mt-2">Create Account</h1>
@@ -72,24 +59,24 @@ const SignUp = () => {
             </div>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             {/* Full Name */}
             <div className="form-control w-full">
               <label className="label">
                 <span className="label-text font-medium">Full Name</span>
               </label>
-              <label className="input input-bordered flex items-center gap-2 w-full">
+              <label className={`input input-bordered flex items-center gap-2 w-full ${errors.fullName ? "input-error" : ""}`}>
                 <User className="size-5 text-base-content/40" />
                 <input
                   type="text"
                   className="grow"
                   placeholder="John Doe"
-                  value={formData.fullName}
-                  onChange={(e) =>
-                    setFormData({ ...formData, fullName: e.target.value })
-                  }
+                  {...register("fullName")}
                 />
               </label>
+              {errors.fullName && (
+                <span className="text-red-500 text-sm mt-1">{errors.fullName.message}</span>
+              )}
             </div>
 
             {/* Email */}
@@ -97,18 +84,18 @@ const SignUp = () => {
               <label className="label">
                 <span className="label-text font-medium">Email</span>
               </label>
-              <label className="input input-bordered flex items-center gap-2 w-full">
+              <label className={`input input-bordered flex items-center gap-2 w-full ${errors.email ? "input-error" : ""}`}>
                 <Mail className="size-5 text-base-content/40" />
                 <input
                   type="email"
                   className="grow"
                   placeholder="you@example.com"
-                  value={formData.email}
-                  onChange={(e) =>
-                    setFormData({ ...formData, email: e.target.value })
-                  }
+                  {...register("email")}
                 />
               </label>
+              {errors.email && (
+                <span className="text-red-500 text-sm mt-1">{errors.email.message}</span>
+              )}
             </div>
 
             {/* Password */}
@@ -116,16 +103,13 @@ const SignUp = () => {
               <label className="label">
                 <span className="label-text font-medium">Password</span>
               </label>
-              <label className="input input-bordered flex items-center gap-2 w-full">
+              <label className={`input input-bordered flex items-center gap-2 w-full ${errors.password ? "input-error" : ""}`}>
                 <Lock className="size-5 text-base-content/40" />
                 <input
                   type={showPassword ? "text" : "password"}
                   className="grow"
                   placeholder="••••••••"
-                  value={formData.password}
-                  onChange={(e) =>
-                    setFormData({ ...formData, password: e.target.value })
-                  }
+                  {...register("password")}
                 />
                 <button
                   type="button"
@@ -138,13 +122,16 @@ const SignUp = () => {
                   )}
                 </button>
               </label>
+              {errors.password && (
+                <span className="text-red-500 text-sm mt-1">{errors.password.message}</span>
+              )}
             </div>
 
             {/* Submit Button */}
             <button
               type="submit"
               className="btn btn-primary w-full"
-              disabled={isSigningUp}
+              disabled={isSubmitting || isSigningUp}
             >
               {isSigningUp ? (
                 <>
@@ -169,7 +156,6 @@ const SignUp = () => {
       </div>
 
       {/* right side */}
-
       <AuthImagePattern
         title="Join our community"
         subtitle="Connect with friends, share moments, and stay in touch with your loved ones."
