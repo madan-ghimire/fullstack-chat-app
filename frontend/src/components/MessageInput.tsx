@@ -234,15 +234,15 @@ const MessageInput = () => {
 
       {/* ✅ Typing indicator */}
       {isTyping && (
-  <div className="flex items-center gap-2 mb-2">
-    <div className="flex space-x-1">
-      <span className="w-2 h-2 bg-zinc-500 rounded-full animate-bounce [animation-delay:-0.3s]"></span>
-      <span className="w-2 h-2 bg-zinc-500 rounded-full animate-bounce [animation-delay:-0.15s]"></span>
-      <span className="w-2 h-2 bg-zinc-500 rounded-full animate-bounce"></span>
-    </div>
-    <span className="text-sm italic text-zinc-500">Typing...</span>
-  </div>
-)}
+        <div className="flex items-center gap-2 mb-2">
+          <div className="flex space-x-1">
+            <span className="w-2 h-2 bg-zinc-500 rounded-full animate-bounce [animation-delay:-0.3s]"></span>
+            <span className="w-2 h-2 bg-zinc-500 rounded-full animate-bounce [animation-delay:-0.15s]"></span>
+            <span className="w-2 h-2 bg-zinc-500 rounded-full animate-bounce"></span>
+          </div>
+          <span className="text-sm italic text-zinc-500">Typing...</span>
+        </div>
+      )}
 
       <form onSubmit={handleSendMessage} className="flex items-center gap-2">
         <div className="flex-1 flex gap-2">
