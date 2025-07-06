@@ -5,7 +5,10 @@
   "scripts": {
     "dev": "tsx watch src/server.ts",
     "build": "tsc",
-    "start": "tsx src/server.ts"
+    "start": "tsx src/server.ts",
+    "seed": "tsx src/seeds/user.seed.ts",
+    "clean:users": "tsx src/seeds/cleanupUsers.ts",
+    "reset:db": "tsx src/seeds/resetDatabase.ts"
   },
   "keywords": [],
   "author": "",

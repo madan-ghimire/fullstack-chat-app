@@ -5,6 +5,7 @@ import { Users, Search } from "lucide-react";
 import { useAuthStore } from "../store/useAuthStore";
 
 const Sidebar = () => {
+  const [showOnlineOnly, setShowOnlineOnly] = useState(false);
   const { getUsers, users, selectedUser, setSelectedUser, isUsersLoading } =
     useChatStore();
 
@@ -18,10 +19,12 @@ const Sidebar = () => {
 
   if (isUsersLoading) return <SidebarSkeleton />;
 
-  // Filtered users based on search
-  const filteredUsers = users.filter((user) =>
-    user.fullName.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  // Combined filter logic for search + online only
+  const filteredUsers = users
+    .filter((user) =>
+      user.fullName.toLowerCase().includes(searchTerm.toLowerCase())
+    )
+    .filter((user) => (showOnlineOnly ? onlineUsers.includes(user._id) : true));
 
   return (
     <aside className="h-full w-20 lg:w-72 border-r border-base-300 flex flex-col transition-all duration-200">
@@ -41,6 +44,21 @@ const Sidebar = () => {
             onChange={(e) => setSearchTerm(e.target.value)}
             className="bg-transparent outline-none w-full text-sm p-1"
           />
+        </div>
+
+        <div className="mt-3 hidden lg:flex items-center gap-2">
+          <label className="cursor-pointer flex items-center gap-2">
+            <input
+              type="checkbox"
+              checked={showOnlineOnly}
+              onChange={(e) => setShowOnlineOnly(e.target.checked)}
+              className="checkbox checkbox-sm"
+            />
+            <span className="text-sm">Show online only</span>
+          </label>
+          <span className="text-xs text-zinc-500">
+            ({onlineUsers.length - 1} online)
+          </span>
         </div>
       </div>
 
