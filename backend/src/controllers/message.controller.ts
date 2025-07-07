@@ -1,6 +1,11 @@
-import cloudinary from "@/lib/cloudinary";
-import Message from "@/models/message.model";
-import User from "@/models/user.model";
+// import cloudinary from "@/lib/cloudinary";
+import cloudinary from "../lib/cloudinary";
+// import { getReceiverSocketId, io } from "@/lib/socket";
+import { getReceiverSocketId, io } from "../lib/socket";
+// import Message from "@/models/message.model";
+import Message from "../models/message.model";
+// import User from "@/models/user.model";
+import User from "../models/user.model";
 import { Request, Response } from "express";
 
 export const getUsersForSidebar = async (req: Request, res: Response) => {
@@ -59,7 +64,13 @@ export const sendMessage = async (req: Request, res: Response) => {
 
     await newMessage.save();
 
-    //todo:  realtime functionality goes here socket.io
+    //  realtime functionality goes here socket.io
+
+    const receiverSocketId = getReceiverSocketId(receiverId);
+
+    if (receiverSocketId) {
+      io.to(receiverSocketId).emit("newMessage", newMessage);
+    }
 
     res.status(201).json(newMessage);
   } catch (error: any) {

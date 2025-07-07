@@ -1,11 +1,19 @@
+// import {
+// checkAuth,
+// logout,
+// signin,
+// signup,
+// updateProfile,
+// } from "@/controllers/auth.controller";
 import {
   checkAuth,
   logout,
   signin,
   signup,
   updateProfile,
-} from "@/controllers/auth.controller";
-import { protectRoute } from "@/middleware/auth.middleware";
+} from "../controllers/auth.controller";
+// import { protectRoute } from "@/middleware/auth.middleware";
+import { protectRoute } from "../middleware/auth.middleware";
 import express, { RequestHandler } from "express";
 
 const router = express.Router();

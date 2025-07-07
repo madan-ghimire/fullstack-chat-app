@@ -4,8 +4,12 @@
   "description": "",
   "scripts": {
     "dev": "tsx watch src/server.ts",
-    "build": "tsc",
-    "start": "tsx src/server.ts"
+    "build": "tsc && tsc-esm-fix dist",
+    "start": "node dist/server.js",
+    "start:dev": "tsx watch src/server.ts",
+    "seed": "tsx src/seeds/user.seed.ts",
+    "clean:users": "tsx src/seeds/cleanupUsers.ts",
+    "reset:db": "tsx src/seeds/resetDatabase.ts"
   },
   "keywords": [],
   "author": "",
@@ -17,6 +21,8 @@
     "@types/express": "^5.0.3",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^24.0.7",
+    "tsc-alias": "^1.8.16",
+    "tsc-esm-fix": "^3.1.2",
     "tsx": "^4.20.3",
     "typescript": "^5.8.3"
   },
@@ -27,6 +33,7 @@
     "cors": "^2.8.5",
     "dotenv": "^17.0.0",
     "express": "^5.1.0",
+    "helmet": "^8.1.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.16.1",
     "socket.io": "^4.8.1",
