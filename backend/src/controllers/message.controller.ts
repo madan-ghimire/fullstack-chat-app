@@ -1,7 +1,11 @@
-import cloudinary from "@/lib/cloudinary";
-import { getReceiverSocketId, io } from "@/lib/socket";
-import Message from "@/models/message.model";
-import User from "@/models/user.model";
+// import cloudinary from "@/lib/cloudinary";
+import cloudinary from "../lib/cloudinary";
+// import { getReceiverSocketId, io } from "@/lib/socket";
+import { getReceiverSocketId, io } from "../lib/socket";
+// import Message from "@/models/message.model";
+import Message from "../models/message.model";
+// import User from "@/models/user.model";
+import User from "../models/user.model";
 import { Request, Response } from "express";
 
 export const getUsersForSidebar = async (req: Request, res: Response) => {

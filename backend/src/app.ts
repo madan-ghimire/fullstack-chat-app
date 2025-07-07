@@ -2,8 +2,10 @@ import express, { Request, Response } from "express";
 import cors from "cors";
 import helmet from "helmet";
 import cookieParser from "cookie-parser";
-import authRoutes from "@/routes/auth.route";
-import messageRoutes from "@/routes/message.route";
+// import authRoutes from "@/routes/auth.route";
+// import messageRoutes from "@/routes/message.route";
+import authRoutes from "./routes/auth.route";
+import messageRoutes from "./routes/message.route";
 
 const app = express();
 

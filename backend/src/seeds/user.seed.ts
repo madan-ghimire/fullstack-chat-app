@@ -129,7 +129,6 @@ const seedDatabase = async (): Promise<void> => {
     );
 
     // ✅ Seed only if no users found
-    // ✅ Seed only if no users found
     await User.insertMany(hashedUsers);
     console.log("Database seeded successfully");
   } catch (error) {
