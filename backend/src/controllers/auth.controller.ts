@@ -1,12 +1,8 @@
-// import User from "@/models/user.model";
 import User from "../models/user.model";
 import { Request, Response } from "express";
 import bcrypt from "bcryptjs";
-// import { generateToken } from "@/lib/utils";
 import { generateToken } from "../lib/utils";
-// import { signinSchema, SignupSchema } from "@/dtos/auth.dto";
 import { signinSchema, SignupSchema } from "../dtos/auth.dto";
-// import cloudinary from "@/lib/cloudinary";
 import cloudinary from "../lib/cloudinary";
 
 export const signup = async (

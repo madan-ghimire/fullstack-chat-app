@@ -1,14 +1,8 @@
-// import {
-// getMessages,
-// getUsersForSidebar,
-// sendMessage,
-// } from "@/controllers/message.controller";
 import {
   getMessages,
   getUsersForSidebar,
   sendMessage,
 } from "../controllers/message.controller";
-// import { protectRoute } from "@/middleware/auth.middleware";
 import { protectRoute } from "../middleware/auth.middleware";
 import express, { RequestHandler } from "express";
 

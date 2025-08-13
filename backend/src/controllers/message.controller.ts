@@ -1,10 +1,17 @@
-// import cloudinary from "@/lib/cloudinary";
+/**
+ * The above functions handle user authentication, retrieving users for a sidebar, fetching messages
+ * between users, and sending messages with optional images.
+ * @param {Request} req - `req` is an object representing the HTTP request. It contains information
+ * about the request made by the client, such as headers, parameters, body, etc. In the provided code
+ * snippets, `req` is of type `Request`, which is from the Express.js library and provides additional
+ * functionalities for handling
+ * @param {Response} res - The `res` parameter in the functions `getUsersForSidebar`, `getMessages`,
+ * and `sendMessage` stands for the response object in Express. It is used to send a response back to
+ * the client making the request. In these functions, `res` is used to send JSON responses with status
+ */
 import cloudinary from "../lib/cloudinary";
-// import { getReceiverSocketId, io } from "@/lib/socket";
 import { getReceiverSocketId, io } from "../lib/socket";
-// import Message from "@/models/message.model";
 import Message from "../models/message.model";
-// import User from "@/models/user.model";
 import User from "../models/user.model";
 import { Request, Response } from "express";
 
@@ -63,8 +70,6 @@ export const sendMessage = async (req: Request, res: Response) => {
     });
 
     await newMessage.save();
-
-    //  realtime functionality goes here socket.io
 
     const receiverSocketId = getReceiverSocketId(receiverId);
 

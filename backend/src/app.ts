@@ -2,10 +2,9 @@ import express, { Request, Response } from "express";
 import cors from "cors";
 import helmet from "helmet";
 import cookieParser from "cookie-parser";
-// import authRoutes from "@/routes/auth.route";
-// import messageRoutes from "@/routes/message.route";
 import authRoutes from "./routes/auth.route";
 import messageRoutes from "./routes/message.route";
+import dashboardRoutes from "./routes/dashboard.route";
 
 const app = express();
 
@@ -25,5 +24,6 @@ app.use("/api/health", (req: Request, res: Response) => {
 
 app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);
+app.use("/api/dashboard", dashboardRoutes);
 
 export default app;

@@ -11,6 +11,7 @@ const SignUp = lazy(() => import("./pages/SignUpPage"));
 const Login = lazy(() => import("./pages/LoginPage"));
 const Settings = lazy(() => import("./pages/SettingsPage"));
 const Profile = lazy(() => import("./pages/ProfilePage"));
+const Dashboard = lazy(() => import("./pages/DashboardPage"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
 const App = () => {
@@ -59,6 +60,10 @@ const App = () => {
         <Route
           path="/profile"
           element={authUser ? <Profile /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/dashboard"
+          element={authUser ? <Dashboard /> : <Navigate to="/login" />}
         />
         <Route path="*" element={<NotFound />} />
       </Routes>

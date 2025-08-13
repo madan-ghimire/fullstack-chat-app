@@ -1,9 +1,7 @@
 import dotenv from "dotenv";
 import http from "http";
 import app from "./app";
-// import { connectDB } from "@/lib/db";
 import { connectDB } from "./lib/db";
-// import { initSocket } from "@/lib/socket";
 import { initSocket } from "./lib/socket";
 
 dotenv.config();
