@@ -8,8 +8,12 @@ export const getDashboardStats = async (req: Request, res: Response) => {
     const totalMessages = await Message.countDocuments();
 
     // Example: count single vs group chats
-    const singleChatsCount = await Message.countDocuments({ isGroup: false });
-    const groupChatsCount = await Message.countDocuments({ isGroup: true });
+    const singleChatsCount = await Message.countDocuments({
+      isGroup: false,
+    }).catch(() => 0);
+    const groupChatsCount = await Message.countDocuments({
+      isGroup: true,
+    }).catch(() => 0);
 
     // Messages per day (last 7 days)
     const last7Days = [...Array(7)].map((_, i) => {
@@ -30,12 +34,19 @@ export const getDashboardStats = async (req: Request, res: Response) => {
       })
     );
 
+    // Fetch latest messages
+    const messages = await Message.find()
+      .populate("senderId", "name avatar") // ✅ correct field
+      .sort({ createdAt: -1 })
+      .limit(50);
+
     res.status(200).json({
       totalUsers,
       totalMessages,
       singleChatsCount,
       groupChatsCount,
       messagesPerDay,
+      messages,
     });
   } catch (error: any) {
     console.log("Error in getDashboardStats:", error.message);

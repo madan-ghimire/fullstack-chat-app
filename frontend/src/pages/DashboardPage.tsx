@@ -46,6 +46,8 @@ const DashboardPage = () => {
   if (loading) return <div className="p-8">Loading...</div>;
   if (!stats) return <div className="p-8">No data available</div>;
 
+  console.log("check stat data", stats);
+
   const barData = {
     labels: stats.messagesPerDay.map((item: any) => item.day.slice(5)),
     datasets: [
@@ -84,6 +86,7 @@ const DashboardPage = () => {
           <div className="stat-value">{stats.totalMessages}</div>
         </div>
       </div>
+
       {/* Charts section */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div className="bg-base-100 shadow rounded p-4">
@@ -94,6 +97,32 @@ const DashboardPage = () => {
           <h3 className="text-lg font-bold mb-2">Chats Overview</h3>
           <Doughnut data={pieData} />
         </div>
+      </div>
+
+      <div className="bg-base-100 shadow rounded p-4 overflow-x-auto max-h-96 overflow-y-auto">
+        <h3 className="text-lg font-bold mb-4">Messages</h3>
+        <table className="table w-full">
+          <thead>
+            <tr>
+              <th>Sender ID</th>
+              <th>Receiver ID</th>
+              <th>Created At</th>
+              <th>Updated At</th>
+            </tr>
+          </thead>
+          <tbody>
+            {stats.messages?.map((msg: any) => (
+              <tr key={msg._id}>
+                <td>{msg?._id}</td>
+                <td>{msg?._id}</td>
+
+                <td>{new Date(msg.createdAt).toLocaleString()}</td>
+                <td>{new Date(msg.updatedAt).toLocaleString()}</td>
+                <td>{msg.text}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </div>
   );
